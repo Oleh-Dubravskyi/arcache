@@ -1,0 +1,10 @@
+build/
+.gradle/
+gradle/
+out/
+.idea/
+gradlew
+gradlew.bat
+arcache.iml
+arcache.ipr
+arcache.iws
