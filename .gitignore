@@ -5,6 +5,6 @@ out/
 .idea/
 gradlew
 gradlew.bat
-arcache.iml
+*.iml
 arcache.ipr
 arcache.iws
