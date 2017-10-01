@@ -15,6 +15,9 @@ public class Arcache {
     }
 
     public void put(String key, String value) {
+        if (key == null) {
+            throw new NullPointerException("Key in Arcache can not be null");
+        }
         map.put(key, value);
     }
 

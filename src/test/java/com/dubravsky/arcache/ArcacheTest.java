@@ -19,4 +19,11 @@ public class ArcacheTest {
         assertThat(arcache.get(key), is(ANY_STRING));
     }
 
+    @Test(expected = NullPointerException.class)
+    public void shouldThrowNpeIfNullKeyIsProvided() {
+        Arcache arcache = Arcache.createDefault();
+
+        arcache.put(null, ANY_STRING);
+    }
+    
 }
