@@ -1,5 +1,58 @@
 package com.dubravsky.arcache;
 
-public class ArcacheTest{
+import org.junit.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
+public class ArcacheTest {
+
+    private static final String ANY_STRING = "LoremIpsum";
+    private static final byte[] NULL_BYTE_ARRAY = null;
+
+    private static String fillStringWith(int size, int value) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            result.append(String.valueOf(value));
+        }
+        return result.toString();
+    }
+
+    @Test
+    public void shouldPutAndGetString() {
+        Arcache arcache = Arcache.createDefault();
+
+        String key = "key_01";
+        arcache.put(key, ANY_STRING);
+
+        assertThat(arcache.get(key), is(ANY_STRING));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void shouldThrowNpeIfNullKeyIsProvided() {
+        Arcache arcache = Arcache.createDefault();
+
+        arcache.put(null, ANY_STRING);
+    }
+
+    @Test
+    public void shouldRemoveOldestItemIfLimitIsExceeded() {
+        String stringFilledWithZeros = fillStringWith(50, 0);
+        String stringFilledWithOnes = fillStringWith(50, 1);
+        String stringFilledWithTwos = fillStringWith(50, 2);
+
+        Arcache arcache = Arcache.builder()
+                .limitSize(100)
+                .build();
+
+        arcache.put("key_01", stringFilledWithZeros);
+        arcache.put("key_02", stringFilledWithOnes);
+        arcache.put("key_03", stringFilledWithTwos); // it tries to insert element with size 50 but
+        // the cache contains two elements with total size of 100. hence, the oldes element (key_01) should be removed
+
+        assertThat(arcache.get("key_01"), is(NULL_BYTE_ARRAY));
+        assertThat(arcache.get("key_02"), is(stringFilledWithOnes));
+        assertThat(arcache.get("key_03"), is(stringFilledWithTwos));
+    }
 
 }
