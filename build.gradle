@@ -13,8 +13,13 @@ repositories {
     jcenter()
 }
 
-configurations.all {
-    exclude group: "commons-logging", module: "commons-logging"
+sourceSets {
+    main {
+        java.srcDir 'src/main/java'
+    }
+    test {
+        java.srcDir 'src/test/java'
+    }
 }
 
 dependencies {
