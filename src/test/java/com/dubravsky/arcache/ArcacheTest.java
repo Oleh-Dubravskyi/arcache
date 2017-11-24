@@ -1,5 +1,6 @@
 package com.dubravsky.arcache;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -10,6 +11,8 @@ public class ArcacheTest {
     private static final String ANY_STRING = "LoremIpsum";
     private static final byte[] NULL_BYTE_ARRAY = null;
 
+    private Arcache defaultArcache;
+
     private static String fillStringWith(int size, int value) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < size; i++) {
@@ -18,21 +21,22 @@ public class ArcacheTest {
         return result.toString();
     }
 
+    @Before
+    public void init(){
+        defaultArcache = Arcache.createDefault();
+    }
+
     @Test
     public void shouldPutAndGetString() {
-        Arcache arcache = Arcache.createDefault();
-
         String key = "key_01";
-        arcache.put(key, ANY_STRING);
+        defaultArcache.put(key, ANY_STRING);
 
-        assertThat(arcache.get(key), is(ANY_STRING));
+        assertThat(defaultArcache.get(key), is(ANY_STRING));
     }
 
     @Test(expected = NullPointerException.class)
     public void shouldThrowNpeIfNullKeyIsProvided() {
-        Arcache arcache = Arcache.createDefault();
-
-        arcache.put(null, ANY_STRING);
+        defaultArcache.put(null, ANY_STRING);
     }
 
     @Test
