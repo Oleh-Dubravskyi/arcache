@@ -5,7 +5,9 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 public class GzipCompressorTest {
 
@@ -23,7 +25,7 @@ public class GzipCompressorTest {
         byte[] compressedData = compressor.compress(INPUT);
         String decompressedString = compressor.decompress(compressedData);
 
-        assertEquals(INPUT, decompressedString);
+        assertThat(decompressedString, is(INPUT));
     }
 
     @Test
@@ -31,7 +33,7 @@ public class GzipCompressorTest {
         byte[] compressedData = compressor.compress(null);
         String decompressedString = compressor.decompress(compressedData);
 
-        assertEquals(null, decompressedString);
+        assertThat(decompressedString, is(nullValue()));
     }
 
     @Test
@@ -39,7 +41,7 @@ public class GzipCompressorTest {
         byte[] compressedData = compressor.compress("");
         String decompressedString = compressor.decompress(compressedData);
 
-        assertEquals("", decompressedString);
+        assertThat(decompressedString, is(""));
     }
 
 }
