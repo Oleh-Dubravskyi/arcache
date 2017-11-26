@@ -1,7 +1,7 @@
 package com.dubravsky.arcache;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -21,7 +21,7 @@ public class ArcacheTest {
         return result.toString();
     }
 
-    @Before
+    @BeforeMethod
     public void init() {
         defaultArcache = Arcache.createDefault();
     }
@@ -34,7 +34,7 @@ public class ArcacheTest {
         assertThat(defaultArcache.get(key), is(ANY_STRING));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void shouldThrowNpeIfNullKeyIsProvided() {
         defaultArcache.put(null, ANY_STRING);
     }

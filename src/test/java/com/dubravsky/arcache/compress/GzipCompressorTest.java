@@ -1,7 +1,7 @@
 package com.dubravsky.arcache.compress;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 
@@ -13,8 +13,8 @@ public class GzipCompressorTest {
 
     private GzipCompressor compressor;
 
-    @Before
-    public void init(){
+    @BeforeMethod
+    public void init() {
         compressor = new GzipCompressor();
     }
 

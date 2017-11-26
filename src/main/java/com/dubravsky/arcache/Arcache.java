@@ -34,7 +34,11 @@ public class Arcache {
     }
 
     public String get(String key) {
-        return new String(map.get(key));
+        byte[] bytes = map.get(key);
+        if (bytes == null) {
+            return null;
+        }
+        return new String(bytes);
     }
 
     public void put(String key, String value) {
