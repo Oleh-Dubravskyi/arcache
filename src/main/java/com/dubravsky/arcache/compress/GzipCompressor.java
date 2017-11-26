@@ -1,5 +1,6 @@
 package com.dubravsky.arcache.compress;
 
+import com.dubravsky.arcache.compress.exception.CompressorException;
 import com.dubravsky.arcache.utils.InputStreamUtils;
 
 import java.io.ByteArrayInputStream;
@@ -14,7 +15,7 @@ public class GzipCompressor implements Compressor {
     private static final String EMPTY_STRING = "";
 
     @Override
-    public byte[] compress(String value) throws IOException {
+    public byte[] compress(String value) {
         if (value == null) {
             return null;
         }
@@ -28,11 +29,13 @@ public class GzipCompressor implements Compressor {
                 gzos.write(value.getBytes());
             }
             return baos.toByteArray();
+        } catch (IOException e) {
+            throw new CompressorException(e);
         }
     }
 
     @Override
-    public String decompress(byte[] data) throws IOException {
+    public String decompress(byte[] data) {
         if (data == null) {
             return null;
         }
@@ -45,6 +48,8 @@ public class GzipCompressor implements Compressor {
              GZIPInputStream gzis = new GZIPInputStream(bais)) {
             byte[] bytes = InputStreamUtils.readFromInputStream(gzis);
             return new String(bytes);
+        } catch (IOException e) {
+            throw new CompressorException(e);
         }
     }
 
