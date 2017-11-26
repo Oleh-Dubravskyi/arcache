@@ -22,7 +22,7 @@ public class ArcacheTest {
     }
 
     @Before
-    public void init(){
+    public void init() {
         defaultArcache = Arcache.createDefault();
     }
 
