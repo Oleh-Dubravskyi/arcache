@@ -15,14 +15,14 @@ public class Arcache {
 
     private final ConcurrentHashMap<String, byte[]> map = new ConcurrentHashMap<>();
     private final Lock lock = new ReentrantLock();
-    private final int limitSize;
+    private final int capacityInBytes;
 
     private LatestFirstConcurrentLinkedSet<String> accessedKeys = new LatestFirstConcurrentLinkedSet<>();
     private AtomicInteger size = new AtomicInteger();
     private Compressor compressor = new GzipCompressor();
 
-    public Arcache(int limitSize) {
-        this.limitSize = limitSize;
+    public Arcache(int capacityInBytes) {
+        this.capacityInBytes = capacityInBytes;
     }
 
     public static Builder builder() {
@@ -50,7 +50,7 @@ public class Arcache {
             lock.lock();
             map.put(key, value.length() < MAX_LENGTH_TO_STORE_WITHOUT_COMPRESSION ? value.getBytes() : compress(value));
             accessedKeys.add(key);
-            if (size.addAndGet(value.length()) > limitSize) {
+            if (size.addAndGet(value.length()) > capacityInBytes) {
                 removeElementsWhileSizeIsExceeded();
             }
         } finally {
@@ -68,7 +68,7 @@ public class Arcache {
             String key = accessedKeys.removeLast();
             byte[] value = map.remove(key);
             currentSize = size.addAndGet(-1 * value.length);
-        } while (currentSize > limitSize);
+        } while (currentSize > capacityInBytes);
     }
 
     public int dataSize() {
@@ -78,18 +78,18 @@ public class Arcache {
     }
 
     public static final class Builder {
-        private int limitSize;
+        private int capacityInBytes;
 
         private Builder() {
         }
 
-        public Builder limitSize(int limitSize) {
-            this.limitSize = limitSize;
+        public Builder capacityInBytes(int capacityInBytes) {
+            this.capacityInBytes = capacityInBytes;
             return this;
         }
 
         public Arcache build() {
-            return new Arcache(limitSize);
+            return new Arcache(capacityInBytes);
         }
     }
 }

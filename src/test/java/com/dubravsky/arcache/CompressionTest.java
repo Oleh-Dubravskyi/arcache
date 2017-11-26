@@ -16,7 +16,7 @@ public class CompressionTest {
 
     @BeforeMethod
     public void init() throws IOException, URISyntaxException {
-        arcache = Arcache.builder().limitSize(10_000_000).build();
+        arcache = Arcache.builder().capacityInBytes(10_000_000).build();
     }
 
     @DataProvider(name = "LongTexts")

@@ -46,7 +46,7 @@ public class ArcacheTest {
         String stringFilledWithTwos = fillStringWith(50, 2);
 
         Arcache arcache = Arcache.builder()
-                .limitSize(100)
+                .capacityInBytes(100)
                 .build();
 
         arcache.put("key_01", stringFilledWithZeros);
