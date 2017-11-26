@@ -71,7 +71,7 @@ public class Arcache {
         } while (currentSize > capacityInBytes);
     }
 
-    public int dataSize() {
+    public int sizeInBytes() {
         return map.values().stream()
                 .mapToInt(s -> s.length)
                 .sum();

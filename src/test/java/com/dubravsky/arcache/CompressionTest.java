@@ -32,8 +32,8 @@ public class CompressionTest {
     public void shouldCompressLongText(String longText) {
         arcache.put("key01", longText);
 
-        assertTrue(arcache.dataSize() > 0);
-        assertTrue(arcache.dataSize() < longText.length() / 3);
+        assertTrue(arcache.sizeInBytes() > 0);
+        assertTrue(arcache.sizeInBytes() < longText.length() / 3);
     }
 
 }
