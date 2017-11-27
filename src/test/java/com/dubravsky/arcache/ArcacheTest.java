@@ -1,6 +1,7 @@
 package com.dubravsky.arcache;
 
-import org.junit.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -10,6 +11,8 @@ public class ArcacheTest {
     private static final String ANY_STRING = "LoremIpsum";
     private static final byte[] NULL_BYTE_ARRAY = null;
 
+    private Arcache defaultArcache;
+
     private static String fillStringWith(int size, int value) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < size; i++) {
@@ -18,21 +21,22 @@ public class ArcacheTest {
         return result.toString();
     }
 
-    @Test
-    public void shouldPutAndGetString() {
-        Arcache arcache = Arcache.createDefault();
-
-        String key = "key_01";
-        arcache.put(key, ANY_STRING);
-
-        assertThat(arcache.get(key), is(ANY_STRING));
+    @BeforeMethod
+    public void init() {
+        defaultArcache = Arcache.createDefault();
     }
 
-    @Test(expected = NullPointerException.class)
-    public void shouldThrowNpeIfNullKeyIsProvided() {
-        Arcache arcache = Arcache.createDefault();
+    @Test
+    public void shouldPutAndGetString() {
+        String key = "key_01";
+        defaultArcache.put(key, ANY_STRING);
 
-        arcache.put(null, ANY_STRING);
+        assertThat(defaultArcache.get(key), is(ANY_STRING));
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void shouldThrowNpeIfNullKeyIsProvided() {
+        defaultArcache.put(null, ANY_STRING);
     }
 
     @Test
@@ -42,7 +46,7 @@ public class ArcacheTest {
         String stringFilledWithTwos = fillStringWith(50, 2);
 
         Arcache arcache = Arcache.builder()
-                .limitSize(100)
+                .capacityInBytes(100)
                 .build();
 
         arcache.put("key_01", stringFilledWithZeros);
