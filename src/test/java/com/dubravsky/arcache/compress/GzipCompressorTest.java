@@ -33,7 +33,7 @@ public class GzipCompressorTest {
         byte[] compressedData = compressor.compress(null);
         String decompressedString = compressor.decompress(compressedData);
 
-        assertThat(decompressedString, is(nullValue()));
+        assertThat(decompressedString, nullValue());
     }
 
     @Test
