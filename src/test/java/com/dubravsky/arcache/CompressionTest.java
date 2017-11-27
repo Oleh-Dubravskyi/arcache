@@ -8,8 +8,10 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static org.testng.Assert.assertTrue;
-import static org.testng.AssertJUnit.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.number.OrderingComparison.greaterThan;
+import static org.hamcrest.number.OrderingComparison.lessThan;
 
 public class CompressionTest {
 
@@ -33,8 +35,8 @@ public class CompressionTest {
     public void shouldCompressLongText(String longText) {
         arcache.put("key01", longText);
 
-        assertTrue(arcache.sizeInBytes() > 0);
-        assertTrue(arcache.sizeInBytes() < longText.length() / 3);
+        assertThat(arcache.sizeInBytes(), greaterThan(0));
+        assertThat(arcache.sizeInBytes(), lessThan(longText.length() / 3));
     }
 
     @DataProvider(name = "ShortTexts")
@@ -49,8 +51,8 @@ public class CompressionTest {
     public void shouldNotCompressShortText(String shortText) {
         arcache.put("key01", shortText);
 
-        assertTrue(arcache.sizeInBytes() > 0);
-        assertEquals(arcache.sizeInBytes(), shortText.length());
+        assertThat(arcache.sizeInBytes(), greaterThan(0));
+        assertThat(arcache.sizeInBytes(), is(shortText.length()));
     }
 
 }
